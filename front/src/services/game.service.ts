@@ -18,7 +18,7 @@ export class GameService extends BaseService {
   }
 
   public newGame(): void {
-    this.http.post(this.url, null)
+    this.http.post(this.url, '')
       .subscribe(response => {
         this.currentGameId$.next(response['id']);
       });
