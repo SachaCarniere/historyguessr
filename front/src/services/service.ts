@@ -1,5 +1,7 @@
 export class BaseService{
-  protected baseUrl = "http://localhost:8000/";
+  protected baseUrl = 'http://localhost:8000/';
 
-  protected getBaseUrl() {return this.baseUrl;}
+  protected getBaseUrl(): string {
+    return this.baseUrl;
+  }
 }
