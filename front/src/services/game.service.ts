@@ -1,10 +1,11 @@
 import {HttpClient} from "@angular/common/http";
 import {BaseService} from "./service";
+import {BehaviorSubject} from "rxjs";
 
 export class GameService extends BaseService{
 
   private url;
-  public currentGameId;
+  public currentGameId$: BehaviorSubject<number> = new BehaviorSubject<number>(0);
 
   constructor(private http: HttpClient) {
     super();
@@ -14,7 +15,7 @@ export class GameService extends BaseService{
   public newGame(){
     this.http.post(this.url, null)
       .subscribe(response => {
-        this.currentGameId = response["id"];
+        this.currentGameId$.next(response["id"]);
       })
   }
 }
