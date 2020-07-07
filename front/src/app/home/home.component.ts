@@ -17,7 +17,7 @@ export class HomeComponent implements OnInit {
 
 
   public play(): void {
-    this.gameService.currentGameId$.subscribe(id => this.router.navigate(['./game/'])); // Redirect quand l'ID est update
-    this.gameService.newGame();
+    // this.gameService.currentGameId$.subscribe(id => this.router.navigate(['./game/'])); // Redirect quand l'ID est update
+    this.gameService.newGame().then( () => this.router.navigate(['./game/']));
   }
 }

@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import {GameService} from '../../services/game.service';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-game',
@@ -7,7 +9,12 @@ import { Component, OnInit } from '@angular/core';
 })
 export class GameComponent implements OnInit {
 
-  constructor() { }
+  images = [];
+
+  constructor(private gameService: GameService, private router: Router){
+    this.gameService.getNextImage().then(path => this.images.push(path));
+
+  }
 
   ngOnInit(): void {
   }

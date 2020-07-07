@@ -9,6 +9,9 @@ import { GameComponent } from './game/game.component';
 import { AppRoutingModule } from './app-routing.module';
 import {HttpClientModule} from '@angular/common/http';
 import { HomeComponent } from './home/home.component';
+import {FormsModule} from "@angular/forms";
+import {MatFormFieldModule} from "@angular/material/form-field";
+import {MatInputModule} from "@angular/material/input";
 
 @NgModule({
   declarations: [
@@ -22,7 +25,10 @@ import { HomeComponent } from './home/home.component';
     AppRoutingModule,
     HttpClientModule,
     MatButtonModule,
-    MatIconModule
+    MatIconModule,
+    FormsModule,
+    MatFormFieldModule,
+    MatInputModule
   ],
   providers: [],
   bootstrap: [AppComponent]

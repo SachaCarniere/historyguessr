@@ -1,1 +1,7 @@
-<p>game works!</p>
+<p>{{images.length}}</p>
+<hgroup *ngFor="let imgPath of images"><img src="{{imgPath}}"></hgroup>
+<ng-form name="yearInput">
+  <mat-form-field>
+    <input matInput placeholder="Guess the year">
+  </mat-form-field>
+</ng-form>
