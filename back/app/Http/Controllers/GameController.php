@@ -90,26 +90,4 @@ class GameController extends Controller
     {
         //
     }
-
-    /**
-     * Get random picture with same year that game ID
-     *
-     * @param Request $request
-     * @param int $id
-     * @return Game|Application|ResponseFactory|Response
-     */
-    public function randomImage(Request $request, int $id)
-    {
-        $game = Game::find($id);
-        if(!$game) {
-            return response('Game ID unknown', 404);
-        }
-
-        $image = Image::where('year', $game->year)->orderByRaw('RAND()')->first();
-        if(!$image) {
-            return response('No image available', 404);
-        }
-
-        return $image->path;
-    }
 }

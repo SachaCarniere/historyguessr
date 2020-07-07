@@ -19,6 +19,6 @@ Route::get('/', function () {
 
 Route::middleware('cors')->group(function () {
     Route::post('game', 'GameController@create');
-    Route::get('randomImage/{id}','GameController@randomImage');
+    Route::get('randomImage/{id}','ImageController@randomImage');
 });
 
