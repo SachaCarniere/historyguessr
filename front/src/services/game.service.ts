@@ -23,4 +23,10 @@ export class GameService extends BaseService {
         this.currentGameId$.next(response['id']);
       });
   }
+
+  public checkAnswer(): Promise<boolean> {
+    return new Promise<boolean>((resolve, reject) => {
+      this.http.get(this.url + this.currentGameId$.getValue()).subscribe(res => resolve(res['validity']));
+    });
+  }
 }
