@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Game;
+use App\GuessResult;
 use App\Image;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Routing\ResponseFactory;
@@ -89,5 +90,13 @@ class GameController extends Controller
     public function destroy(Game $game)
     {
         //
+    }
+
+    public function getScore(Request $request, int $gameId) {
+        $game = Game::find($gameId);
+        if(!$game) {
+            return response('Game ID unknown', 404);
+        }
+        return new GuessResult((int)$request->input("guess"), $game->year);
     }
 }

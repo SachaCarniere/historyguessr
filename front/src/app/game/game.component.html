@@ -2,6 +2,9 @@
 <hgroup *ngFor="let imgPath of images"><img src="{{imgPath}}"></hgroup>
 <ng-form name="yearInput">
   <mat-form-field>
-    <input matInput placeholder="Guess the year">
+    <input matInput name="input" [(ngModel)]="yearGuess" placeholder="Guess the year">
   </mat-form-field>
+  <button (click)="onSubmit()">Guess!</button>
 </ng-form>
+
+<p>{{score}}</p>

@@ -2,6 +2,7 @@ import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {BaseService} from './service';
 import {BehaviorSubject} from 'rxjs';
+import {GuessResult} from "../app/types/GuessResult";
 
 @Injectable({
   providedIn: 'root'
@@ -27,9 +28,10 @@ export class GameService extends BaseService {
     });
   }
 
-  public checkAnswer(guess: number): Promise<boolean> {
-    return new Promise<boolean>((resolve, reject) => {
-      this.http.post(this.url + this.currentGameId$.getValue(), guess).subscribe(res => resolve(res['validity']));
+  public getScore(guess: number): Promise<GuessResult> {
+    return new Promise<GuessResult>((resolve, reject) => {
+      this.http.post(this.url + 'result/' + this.currentGameId$.getValue(), {guess: guess}).subscribe(res =>
+        resolve(new GuessResult(res['guess'], res['actualYear'], res['score'])));
     });
   }
 

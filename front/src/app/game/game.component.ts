@@ -11,6 +11,10 @@ export class GameComponent implements OnInit {
 
   images = [];
 
+  yearGuess: number;
+
+  score: any = '';
+
   constructor(private gameService: GameService, private router: Router){
     this.gameService.getNextImage().then(path => this.images.push(path));
 
@@ -19,4 +23,7 @@ export class GameComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  onSubmit(): void {
+    this.gameService.getScore(this.yearGuess).then( guessResult => this.score = guessResult.score);
+  }
 }
