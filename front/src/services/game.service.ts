@@ -24,9 +24,9 @@ export class GameService extends BaseService {
       });
   }
 
-  public checkAnswer(): Promise<boolean> {
+  public checkAnswer(guess: number): Promise<boolean> {
     return new Promise<boolean>((resolve, reject) => {
-      this.http.get(this.url + this.currentGameId$.getValue()).subscribe(res => resolve(res['validity']));
+      this.http.post(this.url + this.currentGameId$.getValue(), guess).subscribe(res => resolve(res['validity']));
     });
   }
 }
