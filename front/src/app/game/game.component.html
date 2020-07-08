@@ -1,10 +1,27 @@
-<p>{{images.length}}</p>
-<hgroup *ngFor="let imgPath of images"><img src="{{imgPath}}"></hgroup>
-<ng-form name="yearInput">
-  <mat-form-field>
-    <input matInput name="input" [(ngModel)]="yearGuess" placeholder="Guess the year">
-  </mat-form-field>
-  <button (click)="onSubmit()">Guess!</button>
-</ng-form>
-
-<p>{{score}}</p>
+<div class="flex-container-vertical text-center">
+  <div class="row">
+    <div class="flex-item">
+      <h1 class="title title-md">HistoryGuessr</h1>
+    </div>
+  </div>
+  <div class="row">
+    <div class="flex-item">
+      <h2>Image n°{{ currentRound }} / 10</h2>
+      <h3>Score: {{score}}</h3>
+    </div>
+    <div class="flex-item">
+      <img src="{{images[currentRound]}}" alt="Image n°{{currentRound}}">
+    </div>
+    <div class="flex-item">
+      <ng-form name="yearInput">
+        <mat-form-field>
+          <mat-label for="input" >Année :</mat-label>
+          <input matInput name="input" [(ngModel)]="yearGuess" placeholder="2020">
+        </mat-form-field>
+        <div>
+          <button class="w-100" (click)="onSubmit()" mat-raised-button color="primary">Valider</button>
+        </div>
+      </ng-form>
+    </div>
+  </div>
+</div>

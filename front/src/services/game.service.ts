@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {BaseService} from './service';
 import {BehaviorSubject} from 'rxjs';
-import {GuessResult} from "../app/types/GuessResult";
+import {GuessResult} from '../types/GuessResult';
 
 @Injectable({
   providedIn: 'root'
