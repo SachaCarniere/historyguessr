@@ -12,6 +12,7 @@ export class GameService extends BaseService {
 
   private url;
   public currentGameId$: BehaviorSubject<number> = new BehaviorSubject<number>(0);
+  public currentRound$: BehaviorSubject<number> = new BehaviorSubject<number>(1);
 
   constructor(private http: HttpClient) {
     super();
@@ -30,14 +31,14 @@ export class GameService extends BaseService {
 
   public getScore(guess: number): Promise<GuessResult> {
     return new Promise<GuessResult>((resolve, reject) => {
-      this.http.post(this.url + 'result/' + this.currentGameId$.getValue(), {guess: guess}).subscribe(res =>
+      this.http.post(this.url + 'answer/' + this.currentGameId$.getValue() + '/' + this.currentRound$.getValue(), {guess: guess}).subscribe(res =>
         resolve(new GuessResult(res['guess'], res['actualYear'], res['score'])));
     });
   }
 
   public getNextImage(): Promise<string>{
     return new Promise<string>((resolve, reject) => {
-      this.http.get(this.url + 'randomImage/' + this.currentGameId$.getValue()).subscribe(res => resolve(res['path']));
+      this.http.get(this.url + 'randomImage/' + this.currentGameId$.getValue() + '/' + this.currentRound$.getValue()).subscribe(res => resolve(res['path']));
     });
   }
 }

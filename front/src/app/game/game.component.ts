@@ -16,8 +16,9 @@ export class GameComponent implements OnInit {
 
   constructor(private gameService: GameService, private router: Router){
     this.gameService.getNextImage().then(path => this.images.push(path));
+    console.log(this.images);
     this.score = 0;
-    this.currentRound = 0;
+    this.gameService.currentRound$.subscribe(round => this.currentRound = round);
   }
 
   ngOnInit(): void {
@@ -25,10 +26,10 @@ export class GameComponent implements OnInit {
 
   onSubmit(): void {
     this.gameService.getScore(this.yearGuess).then(guessResult => this.score = guessResult.score);
-    /*if (this.currentRound < 11) {
-      this.currentRound++;
+    if (this.currentRound < 11) {
+      this.gameService.currentRound$.next(this.currentRound + 1);
     } else {
       this.router.navigate(['./result/']);
-    }*/
+    }
   }
 }

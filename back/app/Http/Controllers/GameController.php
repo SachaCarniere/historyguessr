@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Game;
 use App\GuessResult;
 use App\Image;
+use App\Round;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\Request;
@@ -13,16 +14,6 @@ use Illuminate\Http\Response;
 class GameController extends Controller
 {
     /**
-     * Display a listing of the resource.
-     *
-     * @return Response
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
      * Show the form for creating a new resource.
      *
      * @return Game
@@ -30,73 +21,26 @@ class GameController extends Controller
     public function create()
     {
         $game = new Game();
-        $game->year = 1998;
         $game->save();
+
+        for ($i = 0; $i < 10; $i++) {
+            $round = new Round();
+            $round->index = $i + 1;
+            $round->year = 1998;
+
+            $game->rounds()->save($round);
+        }
+
 
         return $game;
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Game  $game
-     * @return Response
-     */
-    public function show(Game $game)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Game  $game
-     * @return Response
-     */
-    public function edit(Game $game)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Game  $game
-     * @return Response
-     */
-    public function update(Request $request, Game $game)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Game  $game
-     * @return Response
-     */
-    public function destroy(Game $game)
-    {
-        //
-    }
-
-    public function getScore(Request $request, int $gameId) {
-        $game = Game::find($gameId);
+    public function answer(Request $request, int $game_id, int $round) {
+        $game = Game::find($game_id);
         if(!$game) {
             return response('Game ID unknown', 404);
         }
-        return new GuessResult((int)$request->input("guess"), $game->year);
+
+        return new GuessResult((int) $request->input("guess"), $game->rounds()->where('index', $round)->first()->year);
     }
 }

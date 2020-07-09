@@ -12,96 +12,20 @@ use Illuminate\Http\Response;
 class ImageController extends Controller
 {
     /**
-     * Display a listing of the resource.
-     *
-     * @return Response
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return Response
-     */
-    public function create()
-    {
-
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Image  $image
-     * @return Response
-     */
-    public function show(Image $image)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Image  $image
-     * @return Response
-     */
-    public function edit(Image $image)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Image  $image
-     * @return Response
-     */
-    public function update(Request $request, Image $image)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Image  $image
-     * @return Response
-     */
-    public function destroy(Image $image)
-    {
-        //
-    }
-
-    /**
      * Get random picture with same year that game ID
      *
      * @param Request $request
      * @param int $id
      * @return Image|Application|ResponseFactory|Response
      */
-    public function randomImage(Request $request, int $id)
+    public function randomImage(Request $request, int $game_id, int $round)
     {
-        $game = Game::find($id);
+        $game = Game::find($game_id);
         if(!$game) {
             return response('Game ID unknown', 404);
         }
 
-        $image = Image::where('year', $game->year)->orderByRaw('RAND()')->first();
+        $image = Image::where('year', $game->rounds()->where('index', $round)->first()->year)->orderByRaw('RAND()')->first();
         if(!$image) {
             return response('No image available', 404);
         }
