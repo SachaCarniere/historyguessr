@@ -9,13 +9,13 @@ import {Router} from '@angular/router';
 })
 export class GameComponent implements OnInit {
 
-  images = [];
+  images: string;
   yearGuess: number;
   score: number;
   currentRound: number;
 
   constructor(private gameService: GameService, private router: Router){
-    this.gameService.getNextImage().then(path => this.images.push(path));
+    this.gameService.getNextImage().then(path => this.images = path);
     console.log(this.images);
     this.score = 0;
     this.gameService.currentRound$.subscribe(round => this.currentRound = round);
@@ -25,8 +25,9 @@ export class GameComponent implements OnInit {
   }
 
   onSubmit(): void {
-    this.gameService.getScore(this.yearGuess).then(guessResult => this.score = guessResult.score);
-    if (this.currentRound < 11) {
+    this.gameService.getScore(this.yearGuess).then(guessResult => this.score += guessResult.score);
+    this.gameService.getNextImage().then(path => this.images = path);
+    if (this.currentRound < 10) {
       this.gameService.currentRound$.next(this.currentRound + 1);
     } else {
       this.router.navigate(['./result/']);
