@@ -26,11 +26,12 @@ class GameController extends Controller
         for ($i = 0; $i < 10; $i++) {
             $round = new Round();
             $round->index = $i + 1;
-            $round->year = 1998;
+
+            $image = Image::orderByRaw('RAND()')->first();
+            $round->year = $image->year;
 
             $game->rounds()->save($round);
         }
-
 
         return $game;
     }
