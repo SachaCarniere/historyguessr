@@ -30,6 +30,8 @@ class ImageController extends Controller
             return response('No image available', 404);
         }
 
+        $image->path = env('APP_URL').":8000/storage/img/".$image->path;
+
         return $image;
     }
 }
