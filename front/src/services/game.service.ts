@@ -13,6 +13,7 @@ export class GameService extends BaseService {
   private url;
   public currentGameId$: BehaviorSubject<number> = new BehaviorSubject<number>(0);
   public currentRound$: BehaviorSubject<number> = new BehaviorSubject<number>(1);
+  public currentImage$: BehaviorSubject<string> = new BehaviorSubject<string>('');
 
   constructor(private http: HttpClient) {
     super();
@@ -31,14 +32,19 @@ export class GameService extends BaseService {
 
   public getScore(guess: number): Promise<GuessResult> {
     return new Promise<GuessResult>((resolve, reject) => {
-      this.http.post(this.url + 'answer/' + this.currentGameId$.getValue() + '/' + this.currentRound$.getValue(), {guess: guess}).subscribe(res =>
-        resolve(new GuessResult(res['guess'], res['actualYear'], res['score'])));
+      this.http.post(this.url + 'answer/' + this.currentGameId$.getValue() + '/' + this.currentRound$.getValue(), {guess: guess})
+        .subscribe(res =>
+          resolve(new GuessResult(res['guess'], res['actualYear'], res['score'])));
     });
   }
 
   public getNextImage(): Promise<string>{
     return new Promise<string>((resolve, reject) => {
-      this.http.get(this.url + 'randomImage/' + this.currentGameId$.getValue() + '/' + this.currentRound$.getValue()).subscribe(res => resolve(res['path']));
+      this.http.get(this.url + 'randomImage/' + this.currentGameId$.getValue() + '/' + this.currentRound$.getValue())
+        .subscribe(res =>  {
+          this.currentImage$.next(res['path']);
+          resolve(res['path']);
+        });
     });
   }
 }
