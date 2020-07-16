@@ -1,1 +1,16 @@
-<p>result works!</p>
+<div class="flex-container-vertical text-center">
+  <div class="row">
+    <div class="flex-item">
+      <h1 class="title title-mlg">HistoryGuessr</h1>
+    </div>
+  </div>
+  <div class="row">
+    <div class="flex-item">
+      <h2 class="title title-md">Vous avez un score de {{ score }} / 10000 !</h2>
+    </div>
+    <div class="flex-item">
+      <button mat-raised-button color="primary" class="btn-play" (click)="play()">Rejouer !</button>
+    </div>
+  </div>
+</div>
+

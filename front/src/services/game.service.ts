@@ -14,6 +14,7 @@ export class GameService extends BaseService {
   public currentGameId$: BehaviorSubject<number> = new BehaviorSubject<number>(0);
   public currentRound$: BehaviorSubject<number> = new BehaviorSubject<number>(1);
   public currentImage$: BehaviorSubject<string> = new BehaviorSubject<string>('');
+  public score$: BehaviorSubject<number> = new BehaviorSubject<number>(0);
 
   constructor(private http: HttpClient) {
     super();

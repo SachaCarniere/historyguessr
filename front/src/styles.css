@@ -72,6 +72,18 @@ body {
   0 36px 36px rgba(0,0,0,.15);
 }
 
+.title-lg {
+  font-size: 144pt;
+}
+
+.title-mlg {
+  font-size: 90pt;
+}
+
+.title-md {
+  font-size: 70px;
+}
+
 .w-100 {
   width: 100%;
 }
