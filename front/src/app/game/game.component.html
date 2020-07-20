@@ -1,22 +1,23 @@
-<div class="flex-container-vertical text-center">
+<div class="flex-container-vertical text-center text-white">
   <div class="row">
     <div class="flex-item">
-      <h1 class="title title-md">HistoryGuessr</h1>
+      <h1 class="title title-md margin-0">HistoryGuessr</h1>
     </div>
   </div>
   <div class="row">
     <div class="flex-item">
-      <h2>Image n°{{ currentRound }} / 10</h2>
-      <h3>Score: {{score}}</h3>
+      <h2 class="text-shadow-black">Image n°{{ currentRound }} / 10</h2>
+      <h3 class="text-shadow-black">Score: {{score}}</h3>
     </div>
     <div class="flex-item">
       <img src="{{image}}" alt="Image n°{{currentRound}}" class="img-fluid">
     </div>
-    <div class="flex-item">
+    <div class="flex-item form-guess">
       <ng-form name="yearInput">
+        <h2>À quelle année cette image correspond ?</h2>
         <mat-form-field>
           <mat-label for="input" >Année :</mat-label>
-          <input matInput name="input" [(ngModel)]="yearGuess" placeholder="2020">
+          <input matInput name="input"  id="input" [(ngModel)]="yearGuess" placeholder="2020">
         </mat-form-field>
         <div>
           <button class="w-100" (click)="onSubmit()" mat-raised-button color="primary">Valider</button>
