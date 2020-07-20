@@ -16,15 +16,6 @@ class GuessResult extends Model
         'guess', 'actualYear', 'score',
     ];
 
-    /**
-     * The attributes that should be hidden for arrays.
-     *
-     * @var array
-     */
-    protected $hidden = [
-        'year',
-    ];
-
     public function __construct(int $guess, int $actualYear) {
         parent::__construct();
         $this->guess = $guess;

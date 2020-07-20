@@ -12,7 +12,7 @@ class Round extends Model
      * @var array
      */
     protected $fillable = [
-        'index'
+        'index', 'year_answered'
     ];
 
     /**

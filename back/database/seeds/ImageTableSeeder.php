@@ -11,18 +11,34 @@ class ImageTableSeeder extends Seeder
      */
     public function run()
     {
-        $url = 'http://127.0.0.1:8000/storage/img/';
-
         #1
         $france_champion = new \App\Image();
         $france_champion->year = 1998;
-        $france_champion->path = $url . 'france_champions.jpg';
+        $france_champion->path = 'france_champions.jpg';
         $france_champion->save();
 
         #2
         $attentas = new \App\Image();
         $attentas->year = 1998;
-        $attentas->path = $url . 'attentats_ambasseades_americaines.jpg';
+        $attentas->path = 'attentats_ambasseades_americaines.jpg';
         $attentas->save();
+
+        #3
+        $dix950 = new \App\Image();
+        $dix950->year = 1950;
+        $dix950->path = '1594804892.479353.jpg';
+        $dix950->save();
+
+        #4
+        $dix951 = new \App\Image();
+        $dix951->year = 1951;
+        $dix951->path = '1594804894.870202.jpg';
+        $dix951->save();
+
+        #5
+        $dix952 = new \App\Image();
+        $dix952->year = 1952;
+        $dix952->path = '1594804897.159037.jpg';
+        $dix952->save();
     }
 }

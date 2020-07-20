@@ -18,6 +18,7 @@ class CreateRoundsTable extends Migration
             $table->id();
             $table->integer('index');
             $table->integer('year');
+            $table->integer('year_answered')->nullable();
             $table->bigInteger('game_id')->unsigned();
             $table->foreign('game_id')->references('id')->on('games')->onDelete('cascade');
             $table->timestamps();

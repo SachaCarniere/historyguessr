@@ -16,6 +16,6 @@ class Game extends Model
 
     public function rounds()
     {
-        return $this->hasMany('App\Round');
+        return $this->hasMany('App\Round')->orderBy('index');
     }
 }

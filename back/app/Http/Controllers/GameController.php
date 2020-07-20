@@ -41,7 +41,14 @@ class GameController extends Controller
         if(!$game) {
             return response('Game ID unknown', 404);
         }
+        $round = $game->rounds()->where('index', $round)->first();
+        if ($round->year_answered != null) {
+            return response('Round already answered', 403);
+        }
 
-        return new GuessResult((int) $request->input("guess"), $game->rounds()->where('index', $round)->first()->year);
+        $round->year_answered = $request->input("guess");
+        $round->save();
+
+        return new GuessResult((int) $request->input("guess"), $round->year);
     }
 }
