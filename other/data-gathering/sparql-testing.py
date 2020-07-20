@@ -1,4 +1,5 @@
 import sparql
+import string
 
 q1 = (
 '''
@@ -72,13 +73,20 @@ SELECT ?societalevent, MIN(?date), MIN(?year), MIN(?compyear), ?depiction, (coun
     FILTER (datatype(?date) != xsd:gMonthDay) .
     OPTIONAL {?societalevent prop:year ?year .} .
     OPTIONAL {?societalevent prop:compyear ?compyear .} .
-} GROUP BY ?societalevent ?depiction ORDER BY DESC(?nlinks) LIMIT 100
+} GROUP BY ?societalevent ?depiction ORDER BY DESC(?nlinks) LIMIT 1000
 '''
 ) #Excluding sports events because they are most of the time not relevant
 
 result = sparql.query('http://dbpedia.org/sparql', q3)
 
 for row in result:
-    print(row)
+    if row[1].n3().__contains__("http://www.w3.org/2001/XMLSchema#date") or row[1].n3().__contains__("http://www.w3.org/2001/XMLSchema#integer") or row[1].n3().__contains__("http://www.w3.org/2001/XMLSchema#decimal"):
+        print(str(row[1])[:4])
+    else:
+        if row[2] != None:
+            print(row[2].n3())
+        elif row[3] != None:
+            print(row[3].n3())
+    print(str(row[4].n3())[1:-1])
 
 print("")
