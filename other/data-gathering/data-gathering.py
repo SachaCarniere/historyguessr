@@ -16,7 +16,7 @@ mydb = mysql.connector.connect(
 )
 
 def download_image(url):
-    if forbidden_links.__contains__(url):
+    if url.__contains__(".svg") or url.__contains__(".JPEG"):
         return False
 
     ## Set up the image URL and filename
@@ -42,6 +42,22 @@ def download_image(url):
         return False
 
 
+def try_parse_year(string):
+    blank_space = string.split(' ')
+    for token in blank_space:
+        try:
+            return int(token)
+        except Exception:
+            ""
+    
+    u_space = string.split('\\u')
+    for token in u_space:
+        try:
+            return int(token)
+        except Exception:
+            ""
+    raise Exception("Can't parse")
+
 mycursor = mydb.cursor()
 
 q3 = (
@@ -56,7 +72,8 @@ PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
 SELECT ?societalevent, MIN(?date), MIN(?year), MIN(?compyear), ?depiction, (count(?link) as ?nlinks) WHERE {
     ?societalevent rdf:type ?type .
     ?type rdfs:subClassOf* owl:SocietalEvent .
-    MINUS { ?societalevent a owl:SportsEvent . } .
+    MINUS { ?societalevent rdf:type ?typee .
+            ?typee rdfs:subClassOf* owl:SportsEvent . } .
     ?societalevent owl:wikiPageWikiLink ?link.
     ?societalevent foaf:depiction ?depiction .
     ?societalevent prop:date ?date .
@@ -67,6 +84,7 @@ SELECT ?societalevent, MIN(?date), MIN(?year), MIN(?compyear), ?depiction, (coun
 '''
 ) #Excluding sports events because they are most of the time not relevant
 
+j = 0
 result = sparql.query('http://dbpedia.org/sparql', q3)
 
 i = 0
@@ -78,8 +96,14 @@ for row in result:
             year = int(str(row[2]))
         elif row[3] != None:
             year = int(str(row[3]))
+        elif row[1].n3().__contains__("http://www.w3.org/1999/02/22-rdf-syntax-ns#langString"):
+            try:
+                year = try_parse_year(str(row[1]))
+            except Exception:
+                print("Can't parse")
+                print(row)
         else:
-            break
+            print(row)
 
     filename = download_image(str(row[4].n3())[1:-1])
     if filename:
@@ -90,3 +114,4 @@ for row in result:
     i += 1
     if i%100==0:
         print("###########")
+

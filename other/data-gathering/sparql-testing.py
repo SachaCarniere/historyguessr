@@ -79,7 +79,9 @@ SELECT ?societalevent, MIN(?date), MIN(?year), MIN(?compyear), ?depiction, (coun
 
 result = sparql.query('http://dbpedia.org/sparql', q3)
 
+i=0
 for row in result:
+    
     if row[1].n3().__contains__("http://www.w3.org/2001/XMLSchema#date") or row[1].n3().__contains__("http://www.w3.org/2001/XMLSchema#integer") or row[1].n3().__contains__("http://www.w3.org/2001/XMLSchema#decimal"):
         print(str(row[1])[:4])
     else:
@@ -88,5 +90,7 @@ for row in result:
         elif row[3] != None:
             print(row[3].n3())
     print(str(row[4].n3())[1:-1])
+    i+=1
+    print(i)
 
 print("")
