@@ -10,7 +10,12 @@
       <h3 class="text-shadow-black">Score: {{score}}</h3>
     </div>
     <div class="flex-item">
-      <img src="{{image}}" alt="Image n°{{currentRound}}" class="img-fluid">
+      <ng-container *ngFor="let image of images">
+        <img src="{{image}}" alt="Image n°{{currentRound}}" class="img-fluid">
+      </ng-container>
+    </div>
+    <div class="flex-item">
+      <button class="w-100" (click)="newImg()" mat-raised-button color="warn">Rajouter une image supplémentaire</button>
     </div>
     <div class="flex-item form-guess">
       <ng-form name="yearInput">

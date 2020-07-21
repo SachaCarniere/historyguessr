@@ -11,9 +11,10 @@ import {GuessResult} from '../types/GuessResult';
 export class GameService extends BaseService {
 
   private url;
+  private pathList: string[] = [];
   public currentGameId$: BehaviorSubject<number> = new BehaviorSubject<number>(0);
   public currentRound$: BehaviorSubject<number> = new BehaviorSubject<number>(1);
-  public currentImage$: BehaviorSubject<string> = new BehaviorSubject<string>('');
+  public images$: BehaviorSubject<string[]> = new BehaviorSubject(this.pathList);
   public score$: BehaviorSubject<number> = new BehaviorSubject<number>(0);
 
   constructor(private http: HttpClient) {
@@ -43,7 +44,19 @@ export class GameService extends BaseService {
     return new Promise<string>((resolve, reject) => {
       this.http.get(this.url + 'randomImage/' + this.currentGameId$.getValue() + '/' + this.currentRound$.getValue())
         .subscribe(res =>  {
-          this.currentImage$.next(res['path']);
+          this.pathList.push(res['path']);
+          this.images$.next(this.pathList);
+          resolve(res['path']);
+        });
+    });
+  }
+
+  public getAdditionnalImage(): Promise<string>{
+    return new Promise<string>((resolve, reject) => {
+      this.http.get(this.url + 'randomImage/' + this.currentGameId$.getValue() + '/' + this.currentRound$.getValue())
+        .subscribe(res =>  {
+          this.pathList.push(res['path']);
+          this.images$.next(this.pathList);
           resolve(res['path']);
         });
     });

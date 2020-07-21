@@ -21,7 +21,7 @@ export class ResultComponent implements OnInit {
   public play(): void {
     this.gameService.score$.next(0);
     this.gameService.currentRound$.next(1);
-    this.gameService.currentImage$.next('');
+    this.gameService.images$.next([]);
 
     this.gameService.newGame().then( () => this.router.navigate(['./game/']));
   }

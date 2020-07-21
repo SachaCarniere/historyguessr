@@ -9,7 +9,7 @@ import {Router} from '@angular/router';
 })
 export class GameComponent implements OnInit {
 
-  image: string;
+  images: string[];
   yearGuess: number;
   score: number;
   currentRound: number;
@@ -19,11 +19,15 @@ export class GameComponent implements OnInit {
     this.buttonDisabled = true;
     this.gameService.score$.subscribe(score => this.score = score);
     this.gameService.currentRound$.subscribe(round => this.currentRound = round);
-    this.gameService.currentImage$.subscribe(path => this.image = path);
+    this.gameService.images$.subscribe(path => this.images = path);
     this.gameService.getNextImage().then(data => this.buttonDisabled = false);
   }
 
   ngOnInit(): void {
+  }
+
+  newImg(): void {
+    this.gameService.getAdditionnalImage();
   }
 
   onSubmit(): void {
