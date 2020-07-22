@@ -18,6 +18,7 @@ class CreateImagesTable extends Migration
             $table->id();
             $table->integer('year');
             $table->string('path');
+            $table->string('event_name');
             $table->timestamps();
         });
     }

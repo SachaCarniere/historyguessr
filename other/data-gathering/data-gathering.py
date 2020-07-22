@@ -42,20 +42,30 @@ def download_image(url):
         return False
 
 
-def try_parse_year(string):
+def try_parse_year(string, blank_space_only=False):
     blank_space = string.split(' ')
     for token in blank_space:
         try:
             return int(token)
         except Exception:
             ""
-    
-    u_space = string.split('\\u')
-    for token in u_space:
-        try:
-            return int(token)
-        except Exception:
-            ""
+
+    if not blank_space_only:
+
+        u_space = string.split('\u2013')
+        for token in u_space:
+            try:
+                return int(token)
+            except Exception:
+                ""
+
+        dash_space = string.split('-')
+        for token in u_space:
+            try:
+                return int(token)
+            except Exception:
+                ""
+
     raise Exception("Can't parse")
 
 mycursor = mydb.cursor()
@@ -74,13 +84,13 @@ SELECT ?societalevent, MIN(?date), MIN(?year), MIN(?compyear), ?depiction, (coun
     ?type rdfs:subClassOf* owl:SocietalEvent .
     MINUS { ?societalevent rdf:type ?typee .
             ?typee rdfs:subClassOf* owl:SportsEvent . } .
-    ?societalevent owl:wikiPageWikiLink ?link.
-    ?societalevent foaf:depiction ?depiction .
-    ?societalevent prop:date ?date .
+    ?societalevent owl:wikiPageWikiLink ?link ;
+            foaf:depiction ?depiction ;
+            prop:date ?date .
     FILTER (datatype(?date) != xsd:gMonthDay) .
     OPTIONAL {?societalevent prop:year ?year .} .
     OPTIONAL {?societalevent prop:compyear ?compyear .} .
-} GROUP BY ?societalevent ?depiction ORDER BY DESC(?nlinks) LIMIT 3000
+} GROUP BY ?societalevent ?depiction ORDER BY DESC(?nlinks) LIMIT 1500
 '''
 ) #Excluding sports events because they are most of the time not relevant
 
@@ -89,28 +99,34 @@ result = sparql.query('http://dbpedia.org/sparql', q3)
 
 i = 0
 for row in result:
-    if row[1].n3().__contains__("http://www.w3.org/2001/XMLSchema#date") or row[1].n3().__contains__("http://www.w3.org/2001/XMLSchema#integer") or row[1].n3().__contains__("http://www.w3.org/2001/XMLSchema#decimal"):
-        year = int(str(row[1])[:4])
-    else:
-        if row[2] != None:
-            year = int(str(row[2]))
-        elif row[3] != None:
-            year = int(str(row[3]))
-        elif row[1].n3().__contains__("http://www.w3.org/1999/02/22-rdf-syntax-ns#langString"):
-            try:
-                year = try_parse_year(str(row[1]))
-            except Exception:
-                print("Can't parse")
-                print(row)
+    try:
+        year = try_parse_year(str(row[0].n3())[1:-1].split('/')[-1].replace('_', ' '), True)
+    except Exception:
+        if row[1].n3().__contains__("http://www.w3.org/2001/XMLSchema#date") or row[1].n3().__contains__("http://www.w3.org/2001/XMLSchema#integer") or row[1].n3().__contains__("http://www.w3.org/2001/XMLSchema#decimal"):
+                year = int(str(row[1])[:4])
         else:
-            print(row)
+            if row[2] != None:
+                year = int(str(row[2]))
+            elif row[3] != None:
+                year = int(str(row[3]))
+            elif row[1].n3().__contains__("http://www.w3.org/1999/02/22-rdf-syntax-ns#langString"):
+                try:
+                    year = try_parse_year(str(row[1]))
+                except Exception:
+                    print("Can't parse")
+                    print(row)
+            else:
+                print(row)
+
 
     filename = download_image(str(row[4].n3())[1:-1])
     if filename:
-        mycursor.execute("INSERT INTO images (year, path) VALUES (%s, %s)", (year, filename))
+        mycursor.execute("INSERT INTO images (year, path, event_name) VALUES (%s, %s, %s)", (year, filename, str(row[0].n3())[1:-1].split('/')[-1].replace('_', ' ')))
         mydb.commit()
+        ""
 
-    print(i)
+    print(str(row[0].n3())[1:-1].split('/')[-1].replace('_', ' '))
+    print(year)
     i += 1
     if i%100==0:
         print("###########")
