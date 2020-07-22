@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {GameService} from '../../services/game.service';
 import {Router} from '@angular/router';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-game',
@@ -33,7 +34,24 @@ export class GameComponent implements OnInit {
   onSubmit(): void {
     if (this.yearGuess == null) { return; }
     this.buttonDisabled = true;
-    this.gameService.getScore(this.yearGuess).then(guessResult => this.gameService.score$.next(this.score + guessResult.score));
+    this.gameService.getScore(this.yearGuess).then(guessResult => {
+      this.gameService.score$.next(this.score + guessResult.score);
+      if (guessResult.score < 1000) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Vous avez gagné : ' + guessResult.score + ' points',
+          html: 'L\'image correspondait à l\'année ' + guessResult.actualYear,
+          timer: 3000
+        });
+      } else {
+        Swal.fire({
+          icon: 'success',
+          title: 'Bravo ! Vous avez gagné : ' + guessResult.score + ' points',
+          html: 'Vous avez trouvé la bonne année ! (' + guessResult.actualYear + ')',
+          timer: 3000
+        });
+      }
+    });
     this.yearGuess = null;
     if (this.currentRound < 10) {
       this.gameService.currentRound$.next(this.currentRound + 1);
