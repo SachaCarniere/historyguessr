@@ -44,6 +44,8 @@ export class GameService extends BaseService {
     return new Promise<string>((resolve, reject) => {
       this.http.get(this.url + 'randomImage/' + this.currentGameId$.getValue() + '/' + this.currentRound$.getValue())
         .subscribe(res =>  {
+          this.pathList = [];
+          this.images$.next(this.pathList);
           this.pathList.push(res['path']);
           this.images$.next(this.pathList);
           resolve(res['path']);
