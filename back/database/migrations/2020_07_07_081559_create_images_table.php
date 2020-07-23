@@ -19,6 +19,7 @@ class CreateImagesTable extends Migration
             $table->integer('year');
             $table->string('path');
             $table->string('event_name');
+			$table->longText('img_caption');
             $table->timestamps();
         });
     }
