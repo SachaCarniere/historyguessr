@@ -16,13 +16,13 @@ mydb = mysql.connector.connect(
 )
 
 def download_image(url):
-    if url.__contains__(".svg") or url.__contains__(".JPEG"):
+    if url.__contains__(".svg"):
         return False
 
     ## Set up the image URL and filename
     script_dir = os.path.dirname(__file__) #<-- absolute dir the script is in
     storage_dir = "../../back/storage/app/public/img/"
-    filename = str(datetime.datetime.now().timestamp()) + url[-4:]
+    filename = str(datetime.datetime.now().timestamp()) + "." + url.split('.')[-1]
     file_path = os.path.join(script_dir, storage_dir + filename)
 
     # Open the url image, set stream to True, this will return the stream content.
