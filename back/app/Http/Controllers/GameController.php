@@ -27,10 +27,15 @@ class GameController extends Controller
             $round = new Round();
             $round->index = $i + 1;
 
-            $image = Image::orderByRaw('RAND()')->first();
-            $round->year = $image->year;
-
+            $image_random = Image::orderByRaw('RAND()')->first();
+            $round->year = $image_random->year;
             $game->rounds()->save($round);
+
+
+            $images = Image::where('year', $image_random->year)->take(6)->get();
+            foreach ($images as $key => $image) {
+                $round->images()->save($image);
+            }
         }
 
         return $game;

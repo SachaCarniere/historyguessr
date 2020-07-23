@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Game;
 use App\Image;
+use App\Round;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\Request;
@@ -24,13 +25,18 @@ class ImageController extends Controller
         if(!$game) {
             return response('Game ID unknown', 404);
         }
+        $round = $game->rounds()->where('index', $round)->first();
+        $images =  $round->images()->get();
 
-        $image = Image::where('year', $game->rounds()->where('index', $round)->first()->year)->orderByRaw('RAND()')->first();
+        $image = $images[$round->amount_unlocked];
         if(!$image) {
             return response('No image available', 404);
         }
 
         $image->path = env('APP_URL').":8000/storage/img/".$image->path;
+
+        $round->amount_unlocked = $round->amount_unlocked + 1;
+        $round->save();
 
         return $image;
     }

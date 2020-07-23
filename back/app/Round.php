@@ -12,7 +12,7 @@ class Round extends Model
      * @var array
      */
     protected $fillable = [
-        'index', 'year_answered'
+        'index', 'year_answered','amount_unlocked'
     ];
 
     /**
@@ -27,5 +27,10 @@ class Round extends Model
     public function game()
     {
         return $this->belongsTo('App\Game');
+    }
+
+    public function images()
+    {
+        return $this->belongsToMany('App\Image');
     }
 }

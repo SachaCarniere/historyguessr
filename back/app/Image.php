@@ -23,4 +23,10 @@ class Image extends Model
     protected $hidden = [
         'year',
     ];
+
+
+    public function rounds()
+    {
+        return $this->belongsToMany('App\Round');
+    }
 }
