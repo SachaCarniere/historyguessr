@@ -16,6 +16,7 @@ export class GameService extends BaseService {
   public currentRound$: BehaviorSubject<number> = new BehaviorSubject<number>(1);
   public images$: BehaviorSubject<string[]> = new BehaviorSubject(this.pathList);
   public score$: BehaviorSubject<number> = new BehaviorSubject<number>(0);
+  public maxImg$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
   constructor(private http: HttpClient) {
     super();
@@ -49,6 +50,8 @@ export class GameService extends BaseService {
           this.pathList.push(res['path']);
           this.images$.next(this.pathList);
           resolve(res['path']);
+        }, error => {
+          this.maxImg$.next(true);
         });
     });
   }
@@ -60,6 +63,8 @@ export class GameService extends BaseService {
           this.pathList.push(res['path']);
           this.images$.next(this.pathList);
           resolve(res['path']);
+        }, error => {
+          this.maxImg$.next(true);
         });
     });
   }
