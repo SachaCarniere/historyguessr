@@ -12,7 +12,7 @@
   </div>
   <div class="row justify-content-md-center">
     <div class="col-2" *ngFor="let image of images">
-        <img src="{{image}}" alt="Image n°{{currentRound}}" class="img-fluid">
+        <img src="{{image}}" alt="Image n°{{currentRound}}" class="img-fluid zoom">
     </div>
     <div class="col-2">
       <button class="w-100 h-100" (click)="newImg()" mat-raised-button color="warn">Rajouter une image supplémentaire</button>
