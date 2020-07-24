@@ -16,12 +16,17 @@ export class GameComponent implements OnInit {
   score: number;
   currentRound: number;
   buttonDisabled: boolean;
+  countImg: number;
+  maxImg: boolean;
 
   constructor(private gameService: GameService, private router: Router, private modalSerive: NgbModal) {
     this.buttonDisabled = true;
     this.gameService.score$.subscribe(score => this.score = score);
     this.gameService.currentRound$.subscribe(round => this.currentRound = round);
     this.gameService.images$.subscribe(path => this.images = path);
+    this.gameService.maxImg$.subscribe(bool => this.maxImg = bool);
+
+    this.countImg = 1;
     this.gameService.getNextImage().then(data => this.buttonDisabled = false);
   }
 
@@ -30,6 +35,11 @@ export class GameComponent implements OnInit {
 
   newImg(): void {
     this.gameService.getAdditionnalImage();
+    this.countImg++;
+
+    if (this.countImg >= 6) {
+      this.maxImg = true;
+    }
   }
 
   onSubmit(): void {
@@ -54,6 +64,8 @@ export class GameComponent implements OnInit {
       }
     });
     this.yearGuess = null;
+    this.maxImg = false;
+    this.countImg = 1;
     if (this.currentRound < 10) {
       this.gameService.currentRound$.next(this.currentRound + 1);
       this.gameService.getNextImage().then(data => this.buttonDisabled = false);
