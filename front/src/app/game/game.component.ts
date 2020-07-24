@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {GameService} from '../../services/game.service';
 import {Router} from '@angular/router';
 import Swal from 'sweetalert2';
+import {NgbActiveModal, NgbModal} from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-game',
@@ -16,7 +17,7 @@ export class GameComponent implements OnInit {
   currentRound: number;
   buttonDisabled: boolean;
 
-  constructor(private gameService: GameService, private router: Router) {
+  constructor(private gameService: GameService, private router: Router, private modalSerive: NgbModal) {
     this.buttonDisabled = true;
     this.gameService.score$.subscribe(score => this.score = score);
     this.gameService.currentRound$.subscribe(round => this.currentRound = round);
@@ -60,4 +61,20 @@ export class GameComponent implements OnInit {
       this.router.navigate(['./result/']);
     }
   }
+
+  openModal(image): void{
+    const modalRef = this.modalSerive.open(ImageModalComponent, { size: 'xl' });
+    modalRef.componentInstance.image = image;
+  }
+}
+
+@Component({
+  selector: 'app-image-modal',
+  template: '<img src="{{image}}" alt="HistoryGuessrImage" class="img-fluid">',
+  styles: ['img {width: 100%; height: auto;}']
+})
+export class ImageModalComponent {
+  @Input() image;
+
+  constructor(private activeModal: NgbActiveModal) {}
 }
