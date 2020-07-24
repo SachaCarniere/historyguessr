@@ -20,12 +20,12 @@ class GuessResult extends Model
         parent::__construct();
         $this->guess = $guess;
         $this->actualYear = $actualYear;
-        $this->score = max(1000 - pow(abs($guess-$actualYear), 3), 0);
-        /*$difference = abs($guess-$actualYear);
+        # $this->score = max(1000 - pow(abs($guess-$actualYear), 3), 0);
+        $difference = abs($guess-$actualYear);
         if ($difference == 0) {
             $this->score = 1000;
         } else {
-            $this->score = (int) ( 1000 / ( 1 + exp(-5 * ($difference - ))));
-        }*/
+            $this->score = (int) ( 1000 / ( 1 + exp(($difference/5 - 2))));
+        }
     }
 }
