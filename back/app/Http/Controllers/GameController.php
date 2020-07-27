@@ -10,6 +10,7 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Ramsey\Uuid\Uuid;
 
 class GameController extends Controller
 {
@@ -21,21 +22,15 @@ class GameController extends Controller
     public function create()
     {
         $game = new Game();
+        $game->uuid = Uuid::uuid4();
         $game->save();
 
-        for ($i = 0; $i < 10; $i++) {
+        $images_random = Image::orderByRaw('RAND()')->take(10)->get();
+        foreach ($images_random as $key=>$value) {
             $round = new Round();
-            $round->index = $i + 1;
-
-            $image_random = Image::orderByRaw('RAND()')->first();
-            $round->year = $image_random->year;
+            $round->index = $key + 1;
+            $round->year = $value->year;
             $game->rounds()->save($round);
-
-
-            $images = Image::where('year', $image_random->year)->take(6)->get();
-            foreach ($images as $key => $image) {
-                $round->images()->save($image);
-            }
         }
 
         return $game;

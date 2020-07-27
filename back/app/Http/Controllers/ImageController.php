@@ -26,9 +26,15 @@ class ImageController extends Controller
             return response('Game ID unknown', 404);
         }
         $round = $game->rounds()->where('index', $round)->first();
-        $images =  $round->images()->get();
 
-        $image = $images[$round->amount_unlocked];
+        if ($round->amount_unlocked == 0) {
+            $images = Image::where('year', $round->year)->orderByRaw('RAND("'. $game->uuid .'")')->take(6)->get();
+            foreach ($images as $key => $image) {
+                $round->images()->save($image);
+            }
+        }
+
+        $image = $round->images()->get()[$round->amount_unlocked];
         if(!$image) {
             return response('No image available', 404);
         }

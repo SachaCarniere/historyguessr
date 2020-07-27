@@ -16,6 +16,7 @@ class CreateGamesTable extends Migration
         Schema::create('games', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->id();
+            $table->uuid('uuid');
             $table->timestamps();
         });
     }
