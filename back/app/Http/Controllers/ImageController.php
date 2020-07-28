@@ -34,8 +34,10 @@ class ImageController extends Controller
             }
         }
 
-        $image = $round->images()->get()[$round->amount_unlocked];
-        if(!$image) {
+        $images = $round->images()->get();
+        if ($images->count() > $round->amount_unlocked) {
+            $image = $round->images()->get()[$round->amount_unlocked];
+        } else {
             return response('No image available', 404);
         }
 
