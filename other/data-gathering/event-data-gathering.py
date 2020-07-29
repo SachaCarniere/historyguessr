@@ -1,73 +1,9 @@
-import mysql.connector
 import sparql
 import string
-import requests # to get image from the web
-import shutil # to save it locally
-import datetime
-import os
-
-forbidden_links = ["http://commons.wikimedia.org/wiki/Special:FilePath/Blue_pog.svg"]
-
-mydb = mysql.connector.connect(
-    host="localhost",
-    user="root",
-    password="",
-    database="historyguessr"
-)
-
-def download_image(url):
-    if url.__contains__(".svg"):
-        return False
-
-    ## Set up the image URL and filename
-    script_dir = os.path.dirname(__file__) #<-- absolute dir the script is in
-    storage_dir = "../../back/storage/app/public/img/"
-    filename = str(datetime.datetime.now().timestamp()) + "." + url.split('.')[-1]
-    file_path = os.path.join(script_dir, storage_dir + filename)
-
-    # Open the url image, set stream to True, this will return the stream content.
-    r = requests.get(url, stream = True)
-
-    if r.status_code == 200:
-        # Set decode_content value to True, otherwise the downloaded image file's size will be zero.
-        r.raw.decode_content = True
-        
-        # Open a local file with wb ( write binary ) permission.
-        with open(file_path,'wb') as f:
-            shutil.copyfileobj(r.raw, f)
-            
-        return filename
-    else:
-        print("Error in download_image")
-        return False
+import utils
 
 
-def try_parse_year(string, blank_space_only=False):
-    blank_space = string.split(' ')
-    for token in blank_space:
-        try:
-            return int(token)
-        except Exception:
-            ""
-
-    if not blank_space_only:
-
-        u_space = string.split('\u2013')
-        for token in u_space:
-            try:
-                return int(token)
-            except Exception:
-                ""
-
-        dash_space = string.split('-')
-        for token in u_space:
-            try:
-                return int(token)
-            except Exception:
-                ""
-
-    raise Exception("Can't parse")
-
+mydb = utils.database_connect()
 mycursor = mydb.cursor()
 
 q3 = (
@@ -104,7 +40,7 @@ i = 0
 for row in result:
     year = None
     try:
-        year = try_parse_year(str(row[0].n3())[1:-1].split('/')[-1].replace('_', ' '), True)
+        year = utils.try_parse_year(str(row[0].n3())[1:-1].split('/')[-1].replace('_', ' '), True)
     except Exception:
 
         if row[5] != None:
@@ -122,7 +58,7 @@ for row in result:
         else:
             if row[1].n3().__contains__("http://www.w3.org/1999/02/22-rdf-syntax-ns#langString"):
                 try:
-                    year = try_parse_year(str(row[1]))
+                    year = utils.try_parse_year(str(row[1]))
                 except Exception:
                     print("Can't parse")
                     continue
@@ -142,7 +78,7 @@ for row in result:
         continue
 
 
-    filename = download_image(str(row[6].n3())[1:-1])
+    filename = utils.download_image(str(row[6].n3())[1:-1])
     if filename:
         mycursor.execute("INSERT INTO images (year, path, event_name, img_caption) VALUES (%s, %s, %s, %s)", (year, filename, str(row[0].n3())[1:-1].split('/')[-1].replace('_', ' '), str(row[7])))
         mydb.commit()

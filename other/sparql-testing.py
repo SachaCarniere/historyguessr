@@ -41,7 +41,28 @@ SELECT ?dbodateprop WHERE {
 '''
 )
 
-result = sparql.query('http://dbpedia.org/sparql', q1)
+
+q3 = (
+'''
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX foaf: <http://xmlns.com/foaf/0.1/>
+PREFIX owl: <http://dbpedia.org/ontology/>
+PREFIX prop: <http://dbpedia.org/property/>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+PREFIX schema: <http://schema.org/>
+
+SELECT ?album, MIN(?releasedate), ?wikiPage, MAX(?sales) WHERE {
+    ?album a owl:MusicalWork ;
+           rdf:type schema:MusicAlbum ;
+           owl:releaseDate ?releasedate ;
+           foaf:isPrimaryTopicOf ?wikiPage ;
+           prop:salesamount ?sales .
+}GROUP BY ?album ?wikiPage ?sales ORDER BY DESC(?sales) LIMIT 10
+'''
+)
+
+result = sparql.query('http://dbpedia.org/sparql', q3)
 
 for row in result:
     print(row)
