@@ -21,7 +21,7 @@ class Image extends Model
      * @var array
      */
     protected $hidden = [
-        'year',
+        'year', 'event_name', 'img_caption'
     ];
 
 

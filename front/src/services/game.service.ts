@@ -37,7 +37,7 @@ export class GameService extends BaseService {
     return new Promise<GuessResult>((resolve, reject) => {
       this.http.post(this.url + 'answer/' + this.currentGameId$.getValue() + '/' + this.currentRound$.getValue(), {guess: guess})
         .subscribe(res =>
-          resolve(new GuessResult(res['guess'], res['actualYear'], res['score'])));
+          resolve(new GuessResult(res['guess'], res['actualYear'], res['score'], res['images'], res['event_names'], res['captions'])));
     });
   }
 

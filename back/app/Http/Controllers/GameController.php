@@ -49,6 +49,8 @@ class GameController extends Controller
         $round->year_answered = $request->input("guess");
         $round->save();
 
-        return new GuessResult((int) $request->input("guess"), $round->year);
+
+
+        return new GuessResult((int) $request->input("guess"), $round->year, $round->id, $round->amount_unlocked);
     }
 }

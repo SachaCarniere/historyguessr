@@ -41,7 +41,7 @@ class ImageController extends Controller
             return response('No image available', 404);
         }
 
-        $image->path = env('APP_URL').":8000/storage/img/".$image->path;
+        $image->path = env('APP_URL')."storage/img/".$image->path;
 
         $round->amount_unlocked = $round->amount_unlocked + 1;
         $round->save();

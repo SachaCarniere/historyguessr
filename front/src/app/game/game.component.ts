@@ -47,19 +47,25 @@ export class GameComponent implements OnInit {
     this.buttonDisabled = true;
     this.gameService.getScore(this.yearGuess).then(guessResult => {
       this.gameService.score$.next(this.score + guessResult.score);
+      let imageHTMLCode = '';
+      for (let i = 0; i < guessResult.images.length; i++){
+        imageHTMLCode += '<div class="text-center">' +
+                         '<img src="' + guessResult.images[i] + '" alt="' + guessResult.eventNames[i] + '" class="img-fluid zoom">' +
+                         '<p>' + guessResult.eventNames[i] + '</p>' +
+                         '<p>' + guessResult.captions[i] + '</p>' +
+                         '</div>';
+      }
       if (guessResult.score < 1000) {
         Swal.fire({
           icon: 'error',
           title: 'Vous avez gagné : ' + guessResult.score + ' points',
-          html: 'L\'image correspondait à l\'année ' + guessResult.actualYear,
-          timer: 3000
+          html: '<p>L\'image correspondait à l\'année ' + guessResult.actualYear + '</p>' + imageHTMLCode
         });
       } else {
         Swal.fire({
           icon: 'success',
           title: 'Bravo ! Vous avez gagné : ' + guessResult.score + ' points',
-          html: 'Vous avez trouvé la bonne année ! (' + guessResult.actualYear + ')',
-          timer: 3000
+          html: '<p>Vous avez trouvé la bonne année ! (' + guessResult.actualYear + ')</p>' + imageHTMLCode
         });
       }
     });
@@ -75,7 +81,7 @@ export class GameComponent implements OnInit {
   }
 
   openModal(image): void{
-    const modalRef = this.modalSerive.open(ImageModalComponent, { size: 'xl' });
+    const modalRef = this.modalSerive.open(ImageModalComponent, { size: 'l' });
     modalRef.componentInstance.image = image;
   }
 }
