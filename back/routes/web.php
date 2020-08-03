@@ -19,6 +19,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware('cors')->group(function () {
     Route::post('game', 'GameController@create');
+    Route::post('game/{uuid}', 'GameController@createWithUUID');
+
     Route::get('game/randomImage/{game_id}/{round}','ImageController@randomImage');
     Route::post('game/answer/{game_id}/{round}', 'GameController@answer');
 });

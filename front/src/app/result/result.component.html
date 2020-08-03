@@ -5,12 +5,18 @@
     </div>
   </div>
   <div class="row justify-content-md-center">
-    <div class="col">
-      <h2 class="title title-md">Vous avez un score de {{ score }} / 10000 !</h2>
+    <div class="col text-center">
+      <h2 class="title title-md">Vous avez eu un score de {{ score }} / 10000 !</h2>
     </div>
   </div>
   <div class="row justify-content-md-center">
-    <div class="flex-item">
+    <div class="col-6 text-center share-game">
+      <h2>Partager votre partie :</h2>
+      <input type="text" readonly="readonly" value="{{ env.url + 'share/' + uuid}}" class="form-control form-control-lg text-center">
+    </div>
+  </div>
+  <div class="row justify-content-md-center">
+    <div class="col text-center">
       <button mat-raised-button color="primary" class="btn-play" (click)="play()">Rejouer !</button>
     </div>
   </div>

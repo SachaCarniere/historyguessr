@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {GameService} from '../../services/game.service';
 import {Router} from '@angular/router';
+import {environment} from '../../environments/environment';
 
 @Component({
   selector: 'app-result',
@@ -10,9 +11,12 @@ import {Router} from '@angular/router';
 export class ResultComponent implements OnInit {
 
   score: number;
+  env = environment;
+  uuid: string;
 
   constructor(private gameService: GameService, private router: Router){
     this.gameService.score$.subscribe(score => this.score = score);
+    this.gameService.currentGameUUID$.subscribe(uuid => this.uuid = uuid);
   }
 
   ngOnInit(): void {

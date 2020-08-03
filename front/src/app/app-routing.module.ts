@@ -6,6 +6,7 @@ import {ResultComponent} from './result/result.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
+  { path: 'share/:uuid', component: HomeComponent },
   { path: 'game' , component: GameComponent },
   { path: 'result', component: ResultComponent }
 ];

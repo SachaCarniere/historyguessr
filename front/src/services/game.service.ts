@@ -13,6 +13,7 @@ export class GameService extends BaseService {
   private url;
   private pathList: string[] = [];
   public currentGameId$: BehaviorSubject<number> = new BehaviorSubject<number>(0);
+  public currentGameUUID$: BehaviorSubject<string> = new BehaviorSubject<string>('');
   public currentRound$: BehaviorSubject<number> = new BehaviorSubject<number>(1);
   public images$: BehaviorSubject<string[]> = new BehaviorSubject(this.pathList);
   public score$: BehaviorSubject<number> = new BehaviorSubject<number>(0);
@@ -28,6 +29,18 @@ export class GameService extends BaseService {
       this.http.post(this.url, '')
         .subscribe(res => {
           this.currentGameId$.next(res['id']);
+          this.currentGameUUID$.next(res['uuid']);
+          resolve(res['id']);
+        });
+    });
+  }
+
+  public newGameWithUUID(uuid: string): Promise<number> {
+    return new Promise<number>((resolve, reject) => {
+      this.http.post(this.url + uuid, {uuid: uuid})
+        .subscribe(res => {
+          this.currentGameId$.next(res['id']);
+          this.currentGameUUID$.next(res['uuid']);
           resolve(res['id']);
         });
     });

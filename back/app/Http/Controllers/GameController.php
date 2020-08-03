@@ -14,11 +14,6 @@ use Ramsey\Uuid\Uuid;
 
 class GameController extends Controller
 {
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return Game
-     */
     public function create()
     {
         $game = new Game();
@@ -29,6 +24,23 @@ class GameController extends Controller
         foreach ($images_random as $key=>$value) {
             $round = new Round();
             $round->index = $key + 1;
+            $round->year = $value->year;
+            $game->rounds()->save($round);
+        }
+
+        return $game;
+    }
+
+    public function createWithUUID(Request $request, string $uuid) {
+        $game = new Game();
+        $game->uuid = $uuid;
+        $game->save();
+
+        $shared_game = Game::where('uuid', $uuid)->first();
+
+        foreach ($shared_game->rounds()->get() as $key=>$value) {
+            $round = new Round();
+            $round->index = $value->index;
             $round->year = $value->year;
             $game->rounds()->save($round);
         }
