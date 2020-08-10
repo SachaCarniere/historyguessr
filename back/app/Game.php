@@ -12,7 +12,7 @@ class Game extends Model
      * @var array
      */
     protected $fillable = [
-        'uuid'
+        'uuid', 'category'
     ];
 
     public function rounds()

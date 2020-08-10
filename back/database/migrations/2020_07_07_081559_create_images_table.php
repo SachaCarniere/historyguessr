@@ -20,6 +20,7 @@ class CreateImagesTable extends Migration
             $table->string('path');
             $table->string('event_name');
 			$table->longText('img_caption');
+            $table->string('category')->nullable();
             $table->timestamps();
         });
     }

@@ -14,6 +14,7 @@ class CreateImageRound extends Migration
     public function up()
     {
         Schema::create('image_round', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
             $table->id();
             $table->bigInteger('round_id')->unsigned();
             $table->bigInteger('image_id')->unsigned();

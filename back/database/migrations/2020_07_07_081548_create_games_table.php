@@ -17,6 +17,7 @@ class CreateGamesTable extends Migration
             $table->engine = 'InnoDB';
             $table->id();
             $table->uuid('uuid');
+            $table->string('category')->nullable();
             $table->timestamps();
         });
     }
