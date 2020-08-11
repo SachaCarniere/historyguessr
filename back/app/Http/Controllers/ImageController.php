@@ -48,4 +48,13 @@ class ImageController extends Controller
 
         return $image;
     }
+
+    public function getCategories() {
+        $images = Image::whereNotNull('category')->groupBy('category')->select('category')->get();
+        $categories = collect();
+        foreach ($images as $key => $image) {
+            $categories->push($image->category);
+        }
+        dd($categories);
+    }
 }
