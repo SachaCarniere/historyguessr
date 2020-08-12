@@ -12,21 +12,23 @@ export class GameService extends BaseService {
 
   private url;
   private pathList: string[] = [];
+  private categories: string[] = [];
   public currentGameId$: BehaviorSubject<number> = new BehaviorSubject<number>(0);
   public currentGameUUID$: BehaviorSubject<string> = new BehaviorSubject<string>('');
   public currentRound$: BehaviorSubject<number> = new BehaviorSubject<number>(1);
   public images$: BehaviorSubject<string[]> = new BehaviorSubject(this.pathList);
   public score$: BehaviorSubject<number> = new BehaviorSubject<number>(0);
   public maxImg$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  public categories$: BehaviorSubject<string[]> = new BehaviorSubject<string[]>(this.categories);
 
   constructor(private http: HttpClient) {
     super();
     this.url = super.getBaseUrl() + 'game/';
   }
 
-  public newGame(): Promise<number> {
+  public newGame(category: string): Promise<number> {
     return new Promise<number>((resolve, reject) => {
-      this.http.post(this.url, '')
+      this.http.post(this.url, {category: category})
         .subscribe(res => {
           this.currentGameId$.next(res['id']);
           this.currentGameUUID$.next(res['uuid']);
@@ -35,9 +37,9 @@ export class GameService extends BaseService {
     });
   }
 
-  public newGameWithUUID(uuid: string): Promise<number> {
+  public newGameWithUUID(uuid: string, category: string): Promise<number> {
     return new Promise<number>((resolve, reject) => {
-      this.http.post(this.url + uuid, {uuid: uuid})
+      this.http.post(this.url + uuid, {category: category})
         .subscribe(res => {
           this.currentGameId$.next(res['id']);
           this.currentGameUUID$.next(res['uuid']);
@@ -78,6 +80,26 @@ export class GameService extends BaseService {
           resolve(res['path']);
         }, error => {
           this.maxImg$.next(true);
+        });
+    });
+  }
+
+  public getCategories(): Promise<string[]>{
+    return new Promise<string[]>((resolve, reject) => {
+      this.http.get(super.getBaseUrl() + 'getCategories')
+        .subscribe((res: any[]) =>  {
+          // Flush
+          this.categories = [];
+          this.categories$.next(this.categories);
+          // Default value
+          this.categories.push('Tout');
+          // Categories from back
+          for (let i = 0; i < res.length; i++) {
+            this.categories.push(res[i]);
+          }
+          this.categories$.next(this.categories);
+          }, error => {
+          console.log(error);
         });
     });
   }

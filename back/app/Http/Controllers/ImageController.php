@@ -28,7 +28,11 @@ class ImageController extends Controller
         $round = $game->rounds()->where('index', $round)->first();
 
         if ($round->amount_unlocked == 0) {
-            $images = Image::where('year', $round->year)->orderByRaw('RAND("'. $game->uuid .'")')->take(6)->get();
+            if ($game->category == null) {
+                $images = Image::where('year', $round->year)->orderByRaw('RAND("'. $game->uuid .'")')->take(6)->get();
+            } else {
+                $images = Image::where('year', $round->year)->where('category', $game->category)->orderByRaw('RAND("'. $game->uuid .'")')->take(6)->get();
+            }
             foreach ($images as $key => $image) {
                 $round->images()->save($image);
             }
@@ -55,6 +59,6 @@ class ImageController extends Controller
         foreach ($images as $key => $image) {
             $categories->push($image->category);
         }
-        dd($categories);
+        return $categories;
     }
 }
