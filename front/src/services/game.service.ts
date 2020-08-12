@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpParams} from '@angular/common/http';
 import {BaseService} from './service';
 import {BehaviorSubject} from 'rxjs';
 import {GuessResult} from '../types/GuessResult';
@@ -27,8 +27,11 @@ export class GameService extends BaseService {
   }
 
   public newGame(category: string): Promise<number> {
+    let body = new HttpParams();
+    body = body.set('category', category);
+
     return new Promise<number>((resolve, reject) => {
-      this.http.post(this.url, {category: category})
+      this.http.post(this.url, body)
         .subscribe(res => {
           this.currentGameId$.next(res['id']);
           this.currentGameUUID$.next(res['uuid']);
@@ -38,8 +41,11 @@ export class GameService extends BaseService {
   }
 
   public newGameWithUUID(uuid: string, category: string): Promise<number> {
+    let body = new HttpParams();
+    body = body.set('category', category);
+
     return new Promise<number>((resolve, reject) => {
-      this.http.post(this.url + uuid, {category: category})
+      this.http.post(this.url + uuid, body)
         .subscribe(res => {
           this.currentGameId$.next(res['id']);
           this.currentGameUUID$.next(res['uuid']);

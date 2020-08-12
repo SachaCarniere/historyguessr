@@ -18,8 +18,8 @@ class GameController extends Controller
     {
         $game = new Game();
         $game->uuid = Uuid::uuid4();
-        if ($request->get('category') != 'Tout') {
-            $game->category = $request->get('category');
+        if ($request->input('category') != 'Tout') {
+            $game->category = $request->input('category');
         }
         $game->save();
 
