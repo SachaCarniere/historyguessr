@@ -230,5 +230,3 @@ def custom_merge_sort(keywords):
             proxies.pop(0)
     print('dab')
     trends_merge_sort(keywords, 0, len(keywords)-1, pytrends)
-
-database_clean_unique_years()

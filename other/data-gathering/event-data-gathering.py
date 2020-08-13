@@ -2,6 +2,18 @@ import sparql
 import string
 import utils
 
+def decide_category(event_name):
+    if event_name.__contains__(" War") or event_name.__contains__(" Wars") or event_name.__contains__(" war") or event_name.__contains__(" wars"):
+        return "Conflict"
+    if event_name.__contains__(" Conflict") or event_name.__contains__(" conflict"):
+        return "Conflict"
+    if event_name.__contains__(" Election") or event_name.__contains__(" election"):
+        return "Election"
+    if event_name.__contains__(" Revolution") or event_name.__contains__(" revolution") or event_name.__contains__(" Revolutions") or event_name.__contains__(" revolutions"):
+        return "Revolution"
+    if event_name.__contains__(" Rebellion") or event_name.__contains__(" rebellion"):
+        return "Revolution"
+    return None
 
 mydb = utils.database_connect()
 mycursor = mydb.cursor()
@@ -77,10 +89,12 @@ for row in result:
     if year == None:
         continue
 
+    category = decide_category(str(row[0].n3())[1:-1].split('/')[-1].replace('_', ' '))
+
 
     filename = utils.download_image(str(row[6].n3())[1:-1])
     if filename:
-        mycursor.execute("INSERT INTO images (year, path, event_name, img_caption) VALUES (%s, %s, %s, %s)", (year, filename, str(row[0].n3())[1:-1].split('/')[-1].replace('_', ' '), str(row[7])))
+        mycursor.execute("INSERT INTO images (year, path, event_name, img_caption, category) VALUES (%s, %s, %s, %s, %s)", (year, filename, str(row[0].n3())[1:-1].split('/')[-1].replace('_', ' '), str(row[7]), category))
         mydb.commit()
         ""
 

@@ -21,7 +21,9 @@ SELECT ?album, MIN(?releasedate), ?wikiPage, MAX(?sales) WHERE {
            rdf:type schema:MusicAlbum ;
            owl:releaseDate ?releasedate ;
            foaf:isPrimaryTopicOf ?wikiPage ;
-           prop:salesamount ?sales .
+           prop:salesamount ?sales ;
+           prop:award ?award .
+FILTER (?award = "Platinum"^^<http://www.w3.org/1999/02/22-rdf-syntax-ns#langString>) .
 }GROUP BY ?album ?wikiPage ?sales ORDER BY DESC(?sales) LIMIT 200
 '''
 )
@@ -43,7 +45,7 @@ for row in result:
         try:
             filename = utils.download_image("http:" + extractor.get_img_src())
             if filename:
-                mycursor.execute("INSERT INTO images (year, path, event_name, img_caption) VALUES (%s, %s, %s, %s)", (year, filename, event_name, ""))
+                mycursor.execute("INSERT INTO images (year, path, event_name, img_caption, category) VALUES (%s, %s, %s, %s, %s)", (year, filename, event_name, "", "Album"))
                 mydb.commit()
         except requests.exceptions.InvalidURL:
             pass
