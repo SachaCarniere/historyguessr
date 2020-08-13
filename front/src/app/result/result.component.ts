@@ -27,6 +27,8 @@ export class ResultComponent implements OnInit {
     this.gameService.currentRound$.next(1);
     this.gameService.images$.next([]);
 
-    this.gameService.newGame().then( () => this.router.navigate(['./game/']));
+    // TODO : reset data
+
+    this.router.navigate(['./']);
   }
 }

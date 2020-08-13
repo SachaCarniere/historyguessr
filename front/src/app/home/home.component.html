@@ -4,6 +4,18 @@
       <h1 class="title title-lg">HistoryGuessr</h1>
     </div>
   </div>
+  <div class="row" *ngIf="uuid === null">
+    <div class="col">
+      <h2 class="text-center">Catégorie :</h2>
+      <mat-form-field>
+        <mat-select [(value)]="categorySelected">
+          <ng-container *ngFor="let category of categories;">
+            <mat-option [value]="category">{{ category }}</mat-option>
+          </ng-container>
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </div>
   <div class="row">
     <div class="col">
       <button mat-raised-button color="primary" class="btn-play" (click)="play()">JOUER !</button>

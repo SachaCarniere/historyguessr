@@ -15,6 +15,7 @@ import {MatInputModule} from '@angular/material/input';
 import { ResultComponent } from './result/result.component';
 import {SweetAlert2Module} from '@sweetalert2/ngx-sweetalert2';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import {MatSelectModule} from '@angular/material/select';
 
 @NgModule({
   declarations: [
@@ -31,6 +32,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     HttpClientModule,
     MatButtonModule,
     MatIconModule,
+    MatSelectModule,
     FormsModule,
     MatFormFieldModule,
     MatInputModule,

@@ -14,13 +14,20 @@ use Ramsey\Uuid\Uuid;
 
 class GameController extends Controller
 {
-    public function create()
+    public function create(Request $request)
     {
         $game = new Game();
         $game->uuid = Uuid::uuid4();
+        if ($request->input('category') != 'Tout') {
+            $game->category = $request->input('category');
+        }
         $game->save();
 
-        $images_random = Image::orderByRaw('RAND()')->take(10)->get();
+        if ($game->category == null) {
+            $images_random = Image::orderByRaw('RAND()')->take(10)->get();
+        } else {
+            $images_random = Image::where('category', $game->category)->orderByRaw('RAND()')->take(10)->get();
+        }
         foreach ($images_random as $key=>$value) {
             $round = new Round();
             $round->index = $key + 1;
@@ -32,11 +39,12 @@ class GameController extends Controller
     }
 
     public function createWithUUID(Request $request, string $uuid) {
-        $game = new Game();
-        $game->uuid = $uuid;
-        $game->save();
-
         $shared_game = Game::where('uuid', $uuid)->first();
+
+        $game = new Game();
+        $game->uuid = $shared_game->uuid;
+        $game->category = $shared_game->category;
+        $game->save();
 
         foreach ($shared_game->rounds()->get() as $key=>$value) {
             $round = new Round();
