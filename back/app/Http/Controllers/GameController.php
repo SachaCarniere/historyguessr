@@ -24,9 +24,9 @@ class GameController extends Controller
         $game->save();
 
         if ($game->category == null) {
-            $images_random = Image::orderByRaw('RAND()')->take(10)->get();
+            $images_random = Image::distinct('year')->orderByRaw('RAND()')->take(10)->get();
         } else {
-            $images_random = Image::where('category', $game->category)->orderByRaw('RAND()')->take(10)->get();
+            $images_random = Image::distinct('year')->where('category', $game->category)->orderByRaw('RAND()')->take(10)->get();
         }
         foreach ($images_random as $key=>$value) {
             $round = new Round();
