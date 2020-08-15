@@ -25,7 +25,7 @@
           <h2>À quelle année cette image correspond ?</h2>
           <mat-form-field>
             <mat-label for="input" >Année :</mat-label>
-            <input matInput name="input" id="input" [(ngModel)]="yearGuess" placeholder="2020" pattern="[0-9]{1,4}" required>
+            <input matInput name="input" id="input" [(ngModel)]="yearGuess" placeholder="2020" pattern="[0-9]{1,4}" required (keyup.enter)="onSubmit()">
           </mat-form-field>
           <div>
             <button class="w-100" (click)="onSubmit()" mat-raised-button color="primary" [disabled]="buttonDisabled">Valider</button>

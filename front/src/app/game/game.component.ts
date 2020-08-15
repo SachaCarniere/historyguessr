@@ -42,7 +42,7 @@ export class GameComponent implements OnInit {
   }
 
   onSubmit(): void {
-    if (this.yearGuess == null) { return; }
+    if (this.yearGuess == null || isNaN(this.yearGuess)) { return; }
     this.buttonDisabled = true;
     this.gameService.getScore(this.yearGuess).then(guessResult => {
       this.gameService.score$.next(this.score + guessResult.score);
