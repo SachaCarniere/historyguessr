@@ -34,8 +34,7 @@ export class GameComponent implements OnInit {
   }
 
   newImg(): void {
-    this.gameService.getAdditionnalImage();
-    this.countImg++;
+    this.gameService.getAdditionnalImage().then(r => this.countImg++);
 
     if (this.countImg >= 6) {
       this.maxImg = true;
