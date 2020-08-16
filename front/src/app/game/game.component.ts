@@ -54,7 +54,8 @@ export class GameComponent implements OnInit {
                          '<p>' + guessResult.captions[i] + '</p>' +
                          '</div>';
       }
-      if (guessResult.score < 1000) {
+
+      if (guessResult.actualYear !== guessResult.guess) {
         Swal.fire({
           icon: 'error',
           title: 'Vous avez gagné : ' + guessResult.score + ' points',

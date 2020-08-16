@@ -27,6 +27,11 @@ class GuessResult extends Model
         } else {
             $this->score = (int) ( 1000 / ( 1 + exp(($difference/5 - 2))));
         }
+
+        if ($amountUnlocked > 1) {
+            $this->score -= (5 * ($amountUnlocked - 1) * $this->score) / 100;
+        }
+
         $round = Round::find($roundId);
         $images = $round->images()->get()->take($amountUnlocked);
 
